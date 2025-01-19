@@ -48,6 +48,10 @@ public class UserController {
 
     @GetMapping("/delete")
     public String deleteUser(@RequestParam("id") long id) {
+        User user = userService.getUser(id);
+        if (user == null) {
+            return "redirect:/users";
+        }
         userService.deleteUser(id);
         return "redirect:/users";
     }
@@ -63,7 +67,7 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public String updateUser(@ModelAttribute("user") User user , BindingResult bindingResult) {
+    public String updateUser(@Valid @ModelAttribute("user") User user , BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "edit";
         }
